@@ -1,16 +1,5 @@
 .tooltip {
-  /* margin: 0; */
-  overflow: visible;
-  border: none;
-  background-color: gray;
-}
-
-.tooltip::backdrop {
-  display: none;
-}
-
-.tooltip::after {
-  --tooltip-arrow-color: gray;
+  --tooltip-arrow-color: darkslategray;
   --tooltip-arrow-half-width: 8px;
   --tooltip-arrow-length: 8px;
   --tooltip-side-border: var(--tooltip-arrow-half-width) solid transparent;
@@ -18,6 +7,21 @@
   --tooltip-opposite-border: transparent;
   --tooltip-side-offset: 4px;
 
+  margin: 0;
+  padding: 8px;
+  border-radius: 2px;
+  box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.15);
+  overflow: visible;
+  border: none;
+  background-color: darkslategray;
+  color: white;
+}
+
+.tooltip::backdrop {
+  display: none;
+}
+
+.tooltip::after {
   content: "";
   border-style: solid;
   position: absolute;

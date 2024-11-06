@@ -12,9 +12,9 @@ function App() {
         active={active}
         position="bottom-right"
       >
-        Hello
+        Hello world :)
       </Tooltip>
-      <button id="button" onClick={() => setActive(!active)}>Button</button>
+      <button id="button" style={{ margin: '64px' }} onClick={() => setActive(!active)}>Button</button>
     </>
   )
 }
