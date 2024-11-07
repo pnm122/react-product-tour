@@ -10,7 +10,7 @@ function App() {
       <Tooltip
         on="button"
         active={active}
-        position="bottom-right"
+        position="top-center"
       >
         Hello world :)
       </Tooltip>

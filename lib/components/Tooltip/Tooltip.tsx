@@ -33,8 +33,11 @@ export default function Tooltip({
 
     observer.observe(document.body)
 
+    window.addEventListener('scroll', calculatePosition)
+
     return () => {
       observer.disconnect()
+      window.removeEventListener('scroll', calculatePosition)
     }
   })
 
@@ -47,20 +50,62 @@ export default function Tooltip({
     }
   }, [active, position])
 
-  function calculatePosition() {
-    if(!onElement.current) {
-      return
-    }
-
-    const onRect = onElement.current.getBoundingClientRect()
-    const tooltipRect = tooltip.current!.getBoundingClientRect()
-
+  function calculateTooltipPosition(pos: Props['position'], elem: HTMLElement) {
     // Must be kept aligned with CSS variables
     const arrowHalfWidth = 8
     const arrowLength = 8
     const arrowSideOffset = 4
     // ---------------------------------------
     const gapToElement = 2
+    
+    let x = 0
+    let y = 0
+
+    const onRect = elem.getBoundingClientRect()
+    const tooltipRect = tooltip.current!.getBoundingClientRect()
+
+    if(pos.startsWith('top')) {
+      x = onRect.x + (onRect.width / 2)
+      y = onRect.y - tooltipRect.height - arrowLength - gapToElement
+    } else if(pos.startsWith('bottom')) {
+      x = onRect.x + (onRect.width / 2)
+      y = onRect.y + onRect.height + arrowLength + gapToElement
+    } else if(pos.startsWith('right')) {
+      x = onRect.x + onRect.width + arrowLength + gapToElement
+      y = onRect.y + (onRect.height / 2)
+    } else if(pos.startsWith('left')) {
+      x = onRect.x - tooltipRect.width - arrowLength - gapToElement
+      y = onRect.y + (onRect.height / 2)
+    }
+
+    if(['bottom-right', 'top-right'].includes(pos)) {
+      x -= arrowSideOffset + arrowHalfWidth
+    } else if(['bottom-center', 'top-center'].includes(pos)) {
+      x -= tooltipRect.width / 2
+    } else if(['bottom-left', 'top-left'].includes(pos)) {
+      x -= tooltipRect.width - arrowSideOffset - arrowHalfWidth
+    }
+
+    if(['right-bottom', 'left-bottom'].includes(pos)) {
+      y -= arrowSideOffset + arrowHalfWidth
+    } else if(['right-center', 'left-center'].includes(pos)) {
+      y -= tooltipRect.height / 2
+    } else if(['right-top', 'left-top'].includes(pos)) {
+      y -= tooltipRect.height - arrowSideOffset - arrowHalfWidth
+    }
+
+    return { x, y }
+  }
+
+  function updateTooltipPosition(pos: Props['position'], x: number, y: number) {
+    setCalculatedPosition(pos)
+    tooltip.current!.style.transform = `translate(${x}px, ${y}px)`
+  }
+
+  function calculatePosition() {
+    if(!onElement.current) {
+      return
+    }
 
     //    0 1 2
     //  9       3
@@ -133,40 +178,28 @@ export default function Tooltip({
       ].map(n => numberToPosition[n as 0])
     }
     
-    let x = 0
-    let y = 0
+    const order = createOrder(position)
 
-    if(calculatedPosition.startsWith('top')) {
-      x = onRect.x + (onRect.width / 2)
-      y = onRect.y - tooltipRect.height - arrowLength - gapToElement
-    } else if(calculatedPosition.startsWith('bottom')) {
-      x = onRect.x + (onRect.width / 2)
-      y = onRect.y + onRect.height + arrowLength + gapToElement
-    } else if(calculatedPosition.startsWith('right')) {
-      x = onRect.x + onRect.width + arrowLength + gapToElement
-      y = onRect.y + (onRect.height / 2)
-    } else if(calculatedPosition.startsWith('left')) {
-      x = onRect.x - tooltipRect.width - arrowLength - gapToElement
-      y = onRect.y + (onRect.height / 2)
+    const tooltipRect = tooltip.current!.getBoundingClientRect()
+    const foundWorkingPosition = !!order.find(positionToTry => {
+      const { x, y } = calculateTooltipPosition(positionToTry as any, onElement.current!)
+
+      const withinScreenX = x >= 0 && x + tooltipRect.width < window.innerWidth
+      const withinScreenY = y >= 0 && y + tooltipRect.height < window.innerHeight
+
+      if(withinScreenX && withinScreenY) {
+        updateTooltipPosition(positionToTry as any, x, y)
+        return true
+      } else {
+        return false
+      }
+    })
+
+    // If all positions aren't working, display the tooltip with the default position
+    if(!foundWorkingPosition) {
+      const { x, y } = calculateTooltipPosition(position, onElement.current)
+      updateTooltipPosition(position, x, y)
     }
-
-    if(['bottom-right', 'top-right'].includes(calculatedPosition)) {
-      x -= arrowSideOffset + arrowHalfWidth
-    } else if(['bottom-center', 'top-center'].includes(calculatedPosition)) {
-      x -= tooltipRect.width / 2
-    } else if(['bottom-left', 'top-left'].includes(calculatedPosition)) {
-      x -= tooltipRect.width - arrowSideOffset - arrowHalfWidth
-    }
-
-    if(['right-bottom', 'left-bottom'].includes(calculatedPosition)) {
-      y -= arrowSideOffset + arrowHalfWidth
-    } else if(['right-center', 'left-center'].includes(calculatedPosition)) {
-      y -= tooltipRect.height / 2
-    } else if(['right-top', 'left-top'].includes(calculatedPosition)) {
-      y -= tooltipRect.height - arrowSideOffset - arrowHalfWidth
-    }
-
-    tooltip.current!.style.transform = `translate(${x}px, ${y}px)`
   }
 
   return invalid ? <></> : (
