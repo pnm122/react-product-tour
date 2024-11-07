@@ -1,12 +1,13 @@
-import { PropsWithChildren, useLayoutEffect, useRef, useState } from "react"
+import { CSSProperties, PropsWithChildren, useLayoutEffect, useRef, useState } from "react"
 import createClasses from "../../utils/createClasses"
 import styles from './Tooltip.module.css'
 
-interface Props {
+export interface TooltipProps {
   on: string
   active: boolean
   position: 'top-left' | 'top-center' | 'top-right' | 'right-top' | 'right-center' | 'right-bottom' | 'bottom-left' | 'bottom-center' | 'bottom-right' | 'left-top' | 'left-center' | 'left-bottom'
   className?: string
+  style?: CSSProperties
   clearDefaultStyles?: boolean
 }
 
@@ -15,9 +16,10 @@ export default function Tooltip({
   active,
   position,
   className,
+  style,
   clearDefaultStyles,
   children
-}: PropsWithChildren<Props>) {
+}: PropsWithChildren<TooltipProps>) {
   const [invalid, setInvalid] = useState(false)
   const [calculatedPosition, setCalculatedPosition] = useState(position)
   const tooltip = useRef<HTMLDivElement>(null)
@@ -54,7 +56,7 @@ export default function Tooltip({
     }
   }, [active, position])
 
-  function calculateTooltipPosition(pos: Props['position'], elem: HTMLElement) {
+  function calculateTooltipPosition(pos: TooltipProps['position'], elem: HTMLElement) {
     // Must be kept aligned with CSS variables
     const arrowHalfWidth = 8
     const arrowLength = 8
@@ -101,7 +103,7 @@ export default function Tooltip({
     return { x, y }
   }
 
-  function updateTooltipPosition(pos: Props['position'], x: number, y: number) {
+  function updateTooltipPosition(pos: TooltipProps['position'], x: number, y: number) {
     setCalculatedPosition(pos)
     tooltip.current!.style.transform = `translate(${x}px, ${y}px)`
   }
@@ -139,7 +141,7 @@ export default function Tooltip({
     // Try all alignments on the opposite orientation in the same order
     // Try all alignments counter-clockwise one rotation
     // Try all alignments clockwise one rotation
-    function createOrder(position: Props['position']) {
+    function createOrder(position: TooltipProps['position']) {
       const start = positionToNumber[position]
 
       // function to add while keeping calculations within allowed values
@@ -211,6 +213,7 @@ export default function Tooltip({
       // @ts-ignore
       popover="manual"
       ref={tooltip}
+      style={style}
       className={createClasses({
         [styles['tooltip']]: true,
         [styles['tooltip--default-styles']]: !clearDefaultStyles,
