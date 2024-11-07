@@ -176,11 +176,27 @@ export default function Tooltip({
         return n - (n % 3)
       }
 
+      function endOfOrientation(n: number) {
+        return startOfOrientation(n) + 2
+      }
+
+      // Get the alignment of the same orientation as n closest to start
+      function alignmentClosestToStart(n: number, start: number) {
+        const startSide = startOfOrientation(start) / 3
+        if([0, 3].includes(startSide)) {
+          // Lowest number of orientations adjacent to orientations 0 and 3 are closest
+          return startOfOrientation(n)
+        } else {
+          // Highest number of orientations adjacent to orientations 1 and 2 are closest
+          return endOfOrientation(n)
+        }
+      }
+
       return [
         ...orderWithinOrientation(start),
         ...orderWithinOrientation(add(start, 6)),
-        ...orderWithinOrientation(startOfOrientation(add(start, 9))),
-        ...orderWithinOrientation(startOfOrientation(add(start, 3)))
+        ...orderWithinOrientation(alignmentClosestToStart(add(start, 9), start)),
+        ...orderWithinOrientation(alignmentClosestToStart(add(start, 3), start))
       ].map(n => numberToPosition[n as 0])
     }
     
