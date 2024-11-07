@@ -107,7 +107,7 @@ export default function Tooltip({
   }
 
   function calculatePosition() {
-    if(!onElement.current) {
+    if(!onElement.current || !active) {
       return
     }
 

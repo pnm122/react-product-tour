@@ -12,7 +12,7 @@ function App() {
         active={active}
         position="top-center"
       >
-        Hello world lorem ipsum sit dolor amet idk this is a long piece of text that wraps
+        Hello world lorem ipsum sit dolor amet
       </Tooltip>
       <button id="button" style={{ margin: '64px' }} onClick={() => setActive(!active)}>Button</button>
     </>
