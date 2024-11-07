@@ -1,20 +1,15 @@
 .tooltip {
-  --tooltip-arrow-color: darkslategray;
   --tooltip-arrow-half-width: 8px;
   --tooltip-arrow-length: 8px;
   --tooltip-side-border: var(--tooltip-arrow-half-width) solid transparent;
-  --tooltip-main-border: var(--tooltip-arrow-length) solid var(--tooltip-arrow-color);
+  --tooltip-main-border: var(--tooltip-arrow-length) solid var(--tooltip-background-color);
   --tooltip-opposite-border: transparent;
   --tooltip-side-offset: 4px;
 
-  margin: 0;
-  padding: 8px;
-  border-radius: 2px;
-  box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.15);
   overflow: visible;
   border: none;
-  background-color: darkslategray;
-  color: white;
+  margin: 0;
+  background-color: var(--tooltip-background-color);
 }
 
 .tooltip::backdrop {
@@ -95,4 +90,26 @@
 .tooltip--left-bottom::after,
 .tooltip--right-bottom::after {
   top: var(--tooltip-side-offset);
+}
+
+.tooltip--default-styles {
+  padding: 6px 8px;
+  border-radius: 4px;
+  box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.15);
+  font-size: 0.875rem;
+  max-width: 250px;
+}
+
+@media (prefers-color-scheme: light) {
+  .tooltip--default-styles {
+    --tooltip-background-color: rgb(46, 46, 46);
+    color: white;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .tooltip--default-styles {
+    --tooltip-background-color: rgb(222, 222, 222);
+    color: black;
+  }
 }

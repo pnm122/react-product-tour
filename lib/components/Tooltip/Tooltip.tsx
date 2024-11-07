@@ -6,12 +6,16 @@ interface Props {
   on: string
   active: boolean
   position: 'top-left' | 'top-center' | 'top-right' | 'right-top' | 'right-center' | 'right-bottom' | 'bottom-left' | 'bottom-center' | 'bottom-right' | 'left-top' | 'left-center' | 'left-bottom'
+  className?: string
+  clearDefaultStyles?: boolean
 }
 
 export default function Tooltip({
   on,
   active,
   position,
+  className,
+  clearDefaultStyles,
   children
 }: PropsWithChildren<Props>) {
   const [invalid, setInvalid] = useState(false)
@@ -209,7 +213,9 @@ export default function Tooltip({
       ref={tooltip}
       className={createClasses({
         [styles['tooltip']]: true,
-        [styles[`tooltip--${calculatedPosition}`]]: true
+        [styles['tooltip--default-styles']]: !clearDefaultStyles,
+        [styles[`tooltip--${calculatedPosition}`]]: true,
+        ...(className ? { [className]: true } : {})
       })}>
       {children}
     </div>
