@@ -61,6 +61,77 @@ export default function Tooltip({
     const arrowSideOffset = 4
     // ---------------------------------------
     const gapToElement = 2
+
+    //    0 1 2
+    //  9       3
+    // 10       4
+    // 11       5
+    //    6 7 8
+    const numberToPosition = {
+      0: 'top-left',
+      1: 'top-center',
+      2: 'top-right',
+      3: 'right-top',
+      4: 'right-center',
+      5: 'right-bottom',
+      6: 'bottom-left',
+      7: 'bottom-center',
+      8: 'bottom-right',
+      9: 'left-top',
+      10: 'left-center',
+      11: 'left-bottom'
+    }
+    // flip keys and values for efficient use in both directions
+    const positionToNumber = Object.fromEntries(Object.entries(numberToPosition).map(e => [e[1], parseInt(e[0])]))
+
+    // Create the order of positions to try based on a starting position
+    // Positions are in form [orientation]-[alignment]
+    // Try all alignments in the same orientation from closest to furthest from starting position
+    // Try all alignments on the opposite orientation in the same order
+    // Try all alignments counter-clockwise one rotation
+    // Try all alignments clockwise one rotation
+    function createOrder(position: Props['position']) {
+      const start = positionToNumber[position]
+
+      // function to add while keeping calculations within allowed values
+      function add(n: number, i: number) {
+        return (n + i) % 12
+      }
+
+      // Get the order within an orientation (i.e. the thing before the dash) based on the start number
+      function orderWithinOrientation(start: number) {
+        // maps to alignment of positions (i.e. the thing after the dash)
+        // 0: left/top
+        // 1: center
+        // 2: right/bottom
+        const alignment = start % 3
+
+        return alignment === 0 ? [
+          start,
+          start + 1,
+          start + 2
+        ] : alignment === 1 ? [
+          start,
+          start - 1,
+          start + 1
+        ] : [
+          start,
+          start - 1,
+          start - 2
+        ]
+      }
+
+      function startOfOrientation(n: number) {
+        return n - (n % 3)
+      }
+
+      return [
+        ...orderWithinOrientation(start),
+        ...orderWithinOrientation(add(start, 6)),
+        ...orderWithinOrientation(startOfOrientation(add(start, 9))),
+        ...orderWithinOrientation(startOfOrientation(add(start, 3)))
+      ].map(n => numberToPosition[n as 0])
+    }
     
     let x = 0
     let y = 0
