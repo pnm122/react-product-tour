@@ -1,4 +1,4 @@
-import { CSSProperties, PropsWithChildren, useLayoutEffect, useRef, useState } from "react"
+import { PropsWithChildren, useLayoutEffect, useRef, useState } from "react"
 import createClasses from "../../utils/createClasses"
 import styles from './Tooltip.module.css'
 
@@ -7,8 +7,11 @@ export interface TooltipProps {
   active: boolean
   position: 'top-left' | 'top-center' | 'top-right' | 'right-top' | 'right-center' | 'right-bottom' | 'bottom-left' | 'bottom-center' | 'bottom-right' | 'left-top' | 'left-center' | 'left-bottom'
   className?: string
-  style?: CSSProperties
+  style?: React.CSSProperties
   clearDefaultStyles?: boolean
+  ariaLabel?: string
+  ariaLive?: React.AriaAttributes['aria-live']
+  role?: React.AriaRole
 }
 
 export default function Tooltip({
@@ -18,6 +21,9 @@ export default function Tooltip({
   className,
   style,
   clearDefaultStyles,
+  ariaLabel,
+  ariaLive,
+  role,
   children
 }: PropsWithChildren<TooltipProps>) {
   const [invalid, setInvalid] = useState(false)
@@ -228,6 +234,9 @@ export default function Tooltip({
     <div
       // @ts-ignore
       popover="manual"
+      role={role}
+      aria-live={ariaLive}
+      aria-label={ariaLabel}
       ref={tooltip}
       style={style}
       className={createClasses({

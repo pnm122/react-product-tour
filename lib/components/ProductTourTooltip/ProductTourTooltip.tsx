@@ -7,6 +7,7 @@ type Props = TooltipProps & {
   body: React.ReactNode
   n: number
   tourLength: number
+  name: string
   onNextClicked?: () => void
   onSkipClicked?: () => void
   onFinishClicked?: () => void
@@ -26,6 +27,7 @@ export default function ProductTourTooltip({
   body,
   n,
   tourLength,
+  name,
   onNextClicked,
   onSkipClicked,
   onFinishClicked,
@@ -53,6 +55,10 @@ export default function ProductTourTooltip({
         ...(className ? { [className]: true } : {}),
         ...(props.clearDefaultStyles ? {} : { [styles['tooltip']]: true })
       })}
+      ariaLabel={`${name}: Step ${n + 1} of ${tourLength}`}
+      // Other roles don't seem to be read aloud?
+      // Ideally this should be polite alerting, but it doesn't seem to work
+      role='alert'
       {...props}
     >
       { heading && <h1 className={styles['tooltip__heading']}>{heading}</h1> }
@@ -77,8 +83,6 @@ export default function ProductTourTooltip({
               return (
                 <li 
                   key={adjustedIndex}
-                  aria-label={`Step ${adjustedIndex + 1}`}
-                  aria-current={isSelected ? 'step' : undefined}
                   className={createClasses({
                     [styles['tour-location__dot']]: true,
                     [styles['tour-location__dot--selected']]: isSelected,
@@ -89,7 +93,7 @@ export default function ProductTourTooltip({
               )
             })}
           </ul>
-          <span className={styles['tour-location__number']}>{n + 1}/{tourLength}</span>
+          <span aria-hidden='true' className={styles['tour-location__number']}>{n + 1}/{tourLength}</span>
         </div>
         <div className={styles['buttons']}>
           {!hideNextButton && n !== tourLength - 1 && (
