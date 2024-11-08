@@ -8,6 +8,7 @@
     "host": "vite --host",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+		"format": "prettier --write .",
     "preview": "vite preview",
     "prepare": "husky install"
   },
@@ -32,7 +33,7 @@
     "vite": "^5.4.10"
   },
   "lint-staged": {
-    "*.js": "eslint --cache --fix",
-    "*.{js,css,md}": "prettier --write"
+    "*.{js,ts,jsx,tsx}": "eslint --cache --fix",
+    "*.{js,ts,jsx,tsx,css,md}": "prettier --write"
   }
 }
