@@ -2,7 +2,7 @@ import createClasses from '../../utils/createClasses'
 import Tooltip, { TooltipProps } from '../Tooltip/Tooltip'
 import styles from './ProductTourTooltip.module.css'
 
-type Props = TooltipProps & {
+export type ProductTourTooltipProps = Omit<TooltipProps, 'ariaLabel' | 'ariaLive' | 'role'> & {
   heading?: React.ReactNode
   body: React.ReactNode
   n: number
@@ -13,6 +13,7 @@ type Props = TooltipProps & {
   onFinishClicked?: () => void
   hideNextButton?: boolean
   hideFinishButton?: boolean
+  hideSkipButton?: boolean
   nextButtonClassName?: string
   skipButtonClassName?: string
   finishButtonClassName?: string
@@ -33,6 +34,7 @@ export default function ProductTourTooltip({
   onFinishClicked,
   hideNextButton,
   hideFinishButton,
+  hideSkipButton,
   nextButtonClassName,
   skipButtonClassName,
   finishButtonClassName,
@@ -42,7 +44,7 @@ export default function ProductTourTooltip({
   finishText,
   className,
   ...props
-}: Props) {
+}: ProductTourTooltipProps) {
   const locationRangeStart = tourLength <= 5 || n <= 2
     ? 0
     : n >= tourLength - 2
@@ -116,14 +118,16 @@ export default function ProductTourTooltip({
               {finishText ?? 'Finish'}
             </button>
           )}
-          <button
-            className={createClasses({
-              [styles['button--secondary']]: !clearButtonStyles,
-              ...(skipButtonClassName ? { [skipButtonClassName]: true } : {})
-            })}
-            onClick={() => onSkipClicked && onSkipClicked()}>
-            {skipText ?? 'Skip tour'}
-          </button>
+          {!hideSkipButton && n !== tourLength - 1 && (
+            <button
+              className={createClasses({
+                [styles['button--secondary']]: !clearButtonStyles,
+                ...(skipButtonClassName ? { [skipButtonClassName]: true } : {})
+              })}
+              onClick={() => onSkipClicked && onSkipClicked()}>
+              {skipText ?? 'Skip tour'}
+            </button>
+          )}
         </div>
       </div>
     </Tooltip>
