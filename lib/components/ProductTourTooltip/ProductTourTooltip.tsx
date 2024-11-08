@@ -3,23 +3,50 @@ import Tooltip, { TooltipProps } from '../Tooltip/Tooltip'
 import styles from './ProductTourTooltip.module.css'
 
 export type ProductTourTooltipProps = Omit<TooltipProps, 'ariaLabel' | 'ariaLive' | 'role'> & {
+	/** Optional heading to appear above all other content in the tooltip */
 	heading?: React.ReactNode
+	/** Main content of the tooltip */
 	body: React.ReactNode
+	/** Step position in the tour. Starts from 0 */
 	n: number
+	/** Number of steps in the tour */
 	tourLength: number
+	/** Name of this product tour, read to screen readers */
 	name: string
+	/** Callback for when the 'Next' button is clicked */
 	onNextClicked?: () => void
+	/** Callback for when the 'Skip tour' button is clicked */
 	onSkipClicked?: () => void
+	/** Callback for when the 'Finish' button is clicked */
 	onFinishClicked?: () => void
+	/** Whether to hide the 'Next' button */
 	hideNextButton?: boolean
-	hideFinishButton?: boolean
+	/** Whether to hide the 'Skip tour' button */
 	hideSkipButton?: boolean
+	/** Whether to hide the 'Finish' button */
+	hideFinishButton?: boolean
+	/** Class(es) to add to the 'Next' button */
 	nextButtonClassName?: string
+	/** Class(es) to add to the 'Skip tour' button */
 	skipButtonClassName?: string
+	/** Class(es) to add to the 'Finish' button */
 	finishButtonClassName?: string
+	/** Whether to remove the default styling of the buttons */
 	clearButtonStyles?: boolean
+	/**
+	 * Text to use for the 'Next' button
+	 * @default "Next"
+	 */
 	nextText?: string
+	/**
+	 * Text to use for the 'Skip tour' button
+	 * @default "Skip tour"
+	 */
 	skipText?: string
+	/**
+	 * Text to use for the 'Finish' button
+	 * @default "Finish"
+	 */
 	finishText?: string
 }
 

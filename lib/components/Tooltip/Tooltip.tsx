@@ -21,11 +21,15 @@ export interface TooltipProps {
 		| 'left-top'
 		| 'left-center'
 		| 'left-bottom'
+	/** Class(es) to add to the tooltip container */
 	className?: string
+	/** Inline CSS to add to the tooltip container */
 	style?: React.CSSProperties
+	/** Whether to remove the default styling of the tooltip */
 	clearDefaultStyles?: boolean
+	/** A label on the tooltip for screen readers. Should be used when the tooltip content needs context that can otherwise only be seen. */
 	ariaLabel?: string
-	ariaLive?: React.AriaAttributes['aria-live']
+	/** A role to add to the tooltip. Can be used to give screen readers additional context and/or force the content to be read when opened. */
 	role?: React.AriaRole
 }
 
@@ -37,7 +41,6 @@ export default function Tooltip({
 	style,
 	clearDefaultStyles,
 	ariaLabel,
-	ariaLive,
 	role,
 	children
 }: PropsWithChildren<TooltipProps>) {
@@ -246,7 +249,6 @@ export default function Tooltip({
 			// @ts-expect-error "popover" is not a known attribute in JSX yet, but it is valid. Can safely remove this once it's known.
 			popover="manual"
 			role={role}
-			aria-live={ariaLive}
 			aria-label={ariaLabel}
 			ref={tooltip}
 			style={style}
