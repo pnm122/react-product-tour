@@ -59,31 +59,36 @@ export default function ProductTourTooltip({
       <p className={styles['tooltip__body']}>{body}</p>
       <div className={styles['tooltip__bottom']}>
         <div className={styles['tour-location']}>
-          {new Array(Math.min(5, tourLength)).fill(0).map((_, dotIndex) => {
-            const adjustedIndex = locationRangeStart + dotIndex
-            const dotsToLeft = locationRangeStart
-            const dotsToRight = Math.max(0, tourLength - (locationRangeStart + 5))
-            const isSmall =
-              (dotsToLeft === 1 && dotIndex === 0) ||
-              (dotsToLeft >= 2 && dotIndex === 1) ||
-              (dotsToRight === 1 && dotIndex === 4) ||
-              (dotsToRight >= 2 && dotIndex === 3)
-            const isExtraSmall =
-              (dotsToLeft >= 2 && dotIndex === 0) ||
-              (dotsToRight >= 2 && dotIndex === 4)
-
-            return (
-              <div 
-                key={adjustedIndex}
-                className={createClasses({
-                  [styles['tour-location__dot']]: true,
-                  [styles['tour-location__dot--selected']]: adjustedIndex === n,
-                  [styles['tour-location__dot--small']]: isSmall,
-                  [styles['tour-location__dot--extra-small']]: isExtraSmall
-                })}
-              />
-            )
-          })}
+          <ul className={styles['tour-location__dots']}>
+            {new Array(Math.min(5, tourLength)).fill(0).map((_, dotIndex) => {
+              const adjustedIndex = locationRangeStart + dotIndex
+              const isSelected = adjustedIndex === n
+              const dotsToLeft = locationRangeStart
+              const dotsToRight = Math.max(0, tourLength - (locationRangeStart + 5))
+              const isSmall =
+                (dotsToLeft === 1 && dotIndex === 0) ||
+                (dotsToLeft >= 2 && dotIndex === 1) ||
+                (dotsToRight === 1 && dotIndex === 4) ||
+                (dotsToRight >= 2 && dotIndex === 3)
+              const isExtraSmall =
+                (dotsToLeft >= 2 && dotIndex === 0) ||
+                (dotsToRight >= 2 && dotIndex === 4)
+  
+              return (
+                <li 
+                  key={adjustedIndex}
+                  aria-label={`Step ${adjustedIndex + 1}`}
+                  aria-current={isSelected ? 'step' : undefined}
+                  className={createClasses({
+                    [styles['tour-location__dot']]: true,
+                    [styles['tour-location__dot--selected']]: isSelected,
+                    [styles['tour-location__dot--small']]: isSmall,
+                    [styles['tour-location__dot--extra-small']]: isExtraSmall
+                  })}
+                />
+              )
+            })}
+          </ul>
           <span className={styles['tour-location__number']}>{n + 1}/{tourLength}</span>
         </div>
         <div className={styles['buttons']}>
