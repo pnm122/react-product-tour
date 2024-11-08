@@ -19,6 +19,7 @@ export type ProductTourProps = Pick<
 	| 'skipText'
 	| 'finishText'
 	| 'name'
+	| 'highlight'
 > & {
 	/** Steps of the tour in the order that they are meant to appear */
 	steps: {

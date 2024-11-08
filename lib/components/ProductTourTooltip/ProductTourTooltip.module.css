@@ -108,12 +108,28 @@
 	background-color: var(--tooltip-primary-300);
 }
 
+.highlight-background {
+	position: fixed;
+	inset: 0;
+	/* One below max z-index */
+	z-index: 2147483646;
+	display: none;
+}
+
+.highlight-background--active {
+	display: block;
+}
+
 @media (prefers-color-scheme: light) {
 	.tooltip {
 		--tooltip-primary: rgb(172, 194, 255);
 		--tooltip-primary-900: rgb(198, 213, 255);
 		--tooltip-primary-400: rgb(61, 82, 135);
 		--tooltip-primary-300: rgb(42, 58, 100);
+	}
+
+	.highlight-background {
+		background-color: rgba(0, 0, 0, 0.2);
 	}
 }
 
@@ -123,5 +139,9 @@
 		--tooltip-primary-900: rgb(14, 36, 96);
 		--tooltip-primary-400: rgb(165, 183, 230);
 		--tooltip-primary-300: rgb(185, 201, 242);
+	}
+
+	.highlight-background {
+		background-color: rgba(0, 0, 0, 0.375);
 	}
 }
