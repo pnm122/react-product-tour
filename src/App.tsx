@@ -7,28 +7,28 @@ function App() {
 
 	const steps: ProductTourProps['steps'] = [
 		{
-			tooltipOn: '#a',
+			on: '#a',
 			heading: 'Step 1',
 			body: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-			position: 'top-center'
+			position: 'bottom-center'
 		},
 		{
-			tooltipOn: '#b',
+			on: '#b',
 			heading: 'Step 2',
 			body: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-			position: 'top-center'
+			position: 'bottom-center'
 		},
 		{
-			tooltipOn: '#c',
+			on: '#c',
 			heading: 'Step 3',
 			body: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-			position: 'top-center'
+			position: 'bottom-center'
 		},
 		{
-			tooltipOn: '#d',
+			on: '#d',
 			heading: 'Step 4',
 			body: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-			position: 'top-center'
+			position: 'bottom-center'
 		}
 	]
 
@@ -42,25 +42,16 @@ function App() {
 				onFinishClicked={() => setActiveStep(-1)}
 				onSkipClicked={() => setActiveStep(-1)}
 			/>
-			{/* <ProductTourTooltip
-        on="button"
-        active={active}
-        n={n}
-        tourLength={9}
-        clearButtonStyles
-        name="Product tour"
-        onNextClicked={() => setN(n + 1)}
-        onFinishClicked={() => setActive(false)}
-        onSkipClicked={() => setActive(false)}
-        position="left-center"
-        heading="Hello world"
-        body="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-      >
-      </ProductTourTooltip> */}
-			<button id="a">Button</button>
-			<button id="b">Button</button>
-			<button id="c">Button</button>
-			<button id="d">Button</button>
+			<div className="header">
+				<button id="a" className="test">
+					Button
+				</button>
+				<div id="button-group">
+					<button id="b">Button</button>
+				</div>
+				<button id="c">Button</button>
+				<button id="d">Button</button>
+			</div>
 		</>
 	)
 }

@@ -1,0 +1,33 @@
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 24px;
+}
+
+.header button {
+	padding-inline: 12px;
+	height: 40px;
+	font: inherit;
+	border: none;
+	border-radius: 4px;
+	background-color: rgb(219 63 20);
+	color: white;
+	cursor: pointer;
+	transition: background-color 0.1s;
+}
+
+.header button:hover {
+	background-color: rgb(238 83 40);
+}
+
+#button-group {
+	padding: 64px;
+	background-color: #2d2d2d;
+	perspective: 0px;
+}
+
+.test {
+	perspective: 10px;
+	z-index: 9;
+}
