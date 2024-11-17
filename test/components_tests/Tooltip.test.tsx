@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import Tooltip, { TooltipProps } from '../lib/components/Tooltip/Tooltip'
+import Tooltip, { TooltipProps } from '../../lib/components/Tooltip/Tooltip'
 import React from 'react'
 
 const tooltip = () => document.querySelector<HTMLElement>('[popover=manual]')!
