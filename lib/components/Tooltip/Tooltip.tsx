@@ -44,7 +44,6 @@ export default function Tooltip({
 	role,
 	children
 }: PropsWithChildren<TooltipProps>) {
-	const [invalid, setInvalid] = useState(false)
 	const [calculatedPosition, setCalculatedPosition] = useState(position)
 	const tooltip = useRef<HTMLDivElement>(null)
 	const onElement = useRef<HTMLElement | null>(null)
@@ -215,7 +214,6 @@ export default function Tooltip({
 		onElement.current = document.querySelector(on)
 		if (!onElement.current) {
 			console.warn('Invalid Tooltip target selector:', `${on}`)
-			setInvalid(true)
 			return
 		}
 
@@ -242,9 +240,7 @@ export default function Tooltip({
 		}
 	}, [active, position, calculatePosition])
 
-	return invalid ? (
-		<></>
-	) : (
+	return (
 		<div
 			// @ts-expect-error "popover" is not a known attribute in JSX yet, but it is valid. Can safely remove this once it's known.
 			popover="manual"
