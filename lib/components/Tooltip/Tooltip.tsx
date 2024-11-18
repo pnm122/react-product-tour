@@ -37,12 +37,13 @@ export default function Tooltip({
 	children
 }: PropsWithChildren<TooltipProps>) {
 	const [calculatedPosition, setCalculatedPosition] = useState(position)
+	const [translation, setTranslation] = useState({ x: 0, y: 0 })
 	const tooltip = useRef<HTMLDivElement>(null)
 	const onElement = useRef<HTMLElement | null>(null)
 
 	function updateTooltipPosition(pos: TooltipPosition, x: number, y: number) {
 		setCalculatedPosition(pos)
-		tooltip.current!.style.transform = `translate(${x}px, ${y}px)`
+		setTranslation({ x, y })
 	}
 
 	const calculatePosition = useCallback(() => {
@@ -95,7 +96,10 @@ export default function Tooltip({
 			role={role}
 			aria-label={ariaLabel}
 			ref={tooltip}
-			style={style}
+			style={{
+				transform: `translate(${translation.x}px, ${translation.y}px)`,
+				...style
+			}}
 			className={createClasses({
 				[styles['tooltip']]: true,
 				[styles['tooltip--default-styles']]: !clearDefaultStyles,
