@@ -22,6 +22,9 @@ export interface TooltipProps {
 	role?: React.AriaRole
 }
 
+let frame: number
+let lastOnElementPosition = { x: 0, y: 0 }
+
 export default function Tooltip({
 	on,
 	active,
@@ -43,17 +46,24 @@ export default function Tooltip({
 	}
 
 	const calculatePosition = useCallback(() => {
-		if (!onElement.current || !active) {
+		if (!onElement.current) {
+			frame = requestAnimationFrame(calculatePosition)
 			return
 		}
 
-		const { x, y, finalPosition } = calculateBoundedTooltipPosition(
-			tooltip.current!,
-			onElement.current!,
-			position
-		)
+		const { x: onX, y: onY } = onElement.current.getBoundingClientRect()
+		if (onX !== lastOnElementPosition.x || onY !== lastOnElementPosition.y) {
+			const { x, y, finalPosition } = calculateBoundedTooltipPosition(
+				tooltip.current!,
+				onElement.current!,
+				position
+			)
 
-		updateTooltipPosition(finalPosition, x, y)
+			updateTooltipPosition(finalPosition, x, y)
+			lastOnElementPosition = { x: onX, y: onY }
+		}
+
+		frame = requestAnimationFrame(calculatePosition)
 	}, [active, position])
 
 	useLayoutEffect(() => {
@@ -62,27 +72,19 @@ export default function Tooltip({
 			console.warn('Invalid Tooltip target selector:', `${on}`)
 			return
 		}
-
-		const observer = new ResizeObserver(() => {
-			calculatePosition()
-		})
-
-		observer.observe(document.body)
-
-		window.addEventListener('scroll', calculatePosition)
-
-		return () => {
-			observer.disconnect()
-			window.removeEventListener('scroll', calculatePosition)
-		}
-	}, [calculatePosition, on])
+	}, [on])
 
 	useLayoutEffect(() => {
 		if (active) {
-			calculatePosition()
 			tooltip.current?.showPopover()
+			calculatePosition()
 		} else {
+			cancelAnimationFrame(frame)
 			tooltip.current?.hidePopover()
+		}
+
+		return () => {
+			cancelAnimationFrame(frame)
 		}
 	}, [active, position, calculatePosition])
 
